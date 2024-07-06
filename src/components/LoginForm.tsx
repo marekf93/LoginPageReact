@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-// @ts-ignore 
-import { GoogleLogin } from '@react-oauth/google';
+import { GoogleLogin, GoogleOAuthProvider } from '@react-oauth/google';
 import { Link } from 'react-router-dom';
 
 interface LoginFormProps {

@@ -21,7 +21,7 @@ const App: React.FC = () => {
   };
 
   return (
-    <Router>
+        <Router>
       <div className="min-h-screen flex items-center justify-center p-4">
         <div className="w-full max-w-6xl mx-auto flex flex-col lg:flex-row items-center justify-center">
           <Routes>
@@ -32,7 +32,7 @@ const App: React.FC = () => {
          </div>
         {showError && <ErrorNotification />}
       </div>
-    </Router>
+    </Router>    
   );
 };
 
