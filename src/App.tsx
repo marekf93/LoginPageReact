@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import LoginForm from './components/LoginForm';
+import SignUp from './components/SignUp';
 import ErrorNotification from './components/ErrorNotification';
-
 
 const App: React.FC = () => {
   const [showError, setShowError] = useState(false);
@@ -20,22 +21,19 @@ const App: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4">
-      <div className="w-full max-w-6xl mx-auto flex flex-col lg:flex-row items-center justify-center">
-        <LoginForm onError={handleShowError} />
-        <div className="hidden lg:block lg:w-1/2 bg-white rounded-md shadow max-w-md">
-          <img 
-            src="login_image.jfif" 
-            alt="Login Image" 
-            className="w-full h-full object-cover rounded-lg"
-          />
-        </div>
+    <Router>
+      <div className="min-h-screen flex items-center justify-center p-4">
+        <div className="w-full max-w-6xl mx-auto flex flex-col lg:flex-row items-center justify-center">
+          <Routes>
+            <Route path="/login" element={<LoginForm onError={handleShowError} />} />
+            <Route path="/signup" element={<SignUp onError={handleShowError} />} />
+            <Route path="/" element={<Navigate to="/login" replace />} />
+          </Routes>
+         </div>
+        {showError && <ErrorNotification />}
       </div>
-      {showError && <ErrorNotification />}
-    </div>
+    </Router>
   );
 };
-
-
 
 export default App;
