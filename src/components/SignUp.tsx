@@ -5,7 +5,7 @@ interface SignUpProps {
   onError: (error: string) => void;
 }
 
-const SignUp: React.FC<SignUpProps> = ({ onError }) => {
+const SignUp: React.FC<SignUpProps> = ({ }) => {
   const [isChecked, setIsChecked] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
