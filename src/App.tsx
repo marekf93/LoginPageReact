@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { GoogleOAuthProvider } from '@react-oauth/google';
 import LoginForm from './components/LoginForm';
 import ErrorNotification from './components/ErrorNotification';
 
