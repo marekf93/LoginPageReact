@@ -1,7 +1,11 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 
-const SignUp: React.FC = () => {
+interface SignUpProps {
+  onError: (error: string) => void;
+}
+
+const SignUp: React.FC<SignUpProps> = ({ onError }) => {
   const [isChecked, setIsChecked] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");

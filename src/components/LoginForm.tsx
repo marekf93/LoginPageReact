@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+// @ts-ignore
 import { GoogleLogin } from '@react-oauth/google';
 import { Link } from 'react-router-dom';
 
@@ -22,6 +23,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onError }) => {
   };
 
   return (
+    <GoogleOAuthProvider clientId="1020808879402-pm4rrr81517uur00qv78360clt5c37e9.apps.googleusercontent.com">
     <div className="flex w-full max-w-5xl mx-auto">
       <div className="w-full lg:w-1/2 max-w-md mx-auto lg:mx-0 px-6 py-12 bg-white rounded-lg shadow flex flex-col justify-center items-center gap-8">
         <h2 className="text-neutral-900 text-3xl font-semibold font-['Noto Sans'] leading-9 sm:text-center">Log in to your account</h2>
@@ -98,6 +100,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onError }) => {
         />
       </div>
     </div>
+    </GoogleOAuthProvider>
   );
 };
 
