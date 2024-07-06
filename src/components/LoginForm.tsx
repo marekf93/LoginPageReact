@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-// @ts-ignore
+// @ts-ignore 
 import { GoogleLogin } from '@react-oauth/google';
 import { Link } from 'react-router-dom';
 
