@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 
 interface SignUpProps {
@@ -9,12 +9,34 @@ const SignUp: React.FC<SignUpProps> = ({ }) => {
   const [isChecked, setIsChecked] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [passwordRequirements, setPasswordRequirements] = useState({
+    length: false,
+    uppercase: false,
+    lowercase: false,
+    number: false,
+    special: false,
+  });
 
   const handleCheckboxClick = () => {
     setIsChecked(!isChecked);
   };
-  const inputClasses = "self-stretch px-3.5 py-2.5 bg-neutral-50 rounded border border-neutral-200 text-neutral-900 text-sm font-normal font-['Noto Sans'] leading-tight focus:outline-none focus:ring-2 focus:ring-indigo-700 focus:border-transparent transition duration-200 ease-in-out"; 
-  
+
+  const checkPasswordRequirements = (password: string) => {
+    setPasswordRequirements({
+      length: password.length >= 8 && password.length <= 64,
+      uppercase: /[A-Z]/.test(password),
+      lowercase: /[a-z]/.test(password),
+      number: /[0-9]/.test(password),
+      special: /[!@#$%^&*]/.test(password),
+    });
+  };
+
+  useEffect(() => {
+    checkPasswordRequirements(password);
+  }, [password]);
+
+  const inputClasses = "self-stretch px-3.5 py-2.5 bg-neutral-50 rounded border border-neutral-200 text-neutral-900 text-sm font-normal font-['Noto Sans'] leading-tight focus:outline-none focus:ring-2 focus:ring-indigo-700 focus:border-transparent transition duration-200 ease-in-out";
+
   return (
     <div className="flex w-full max-w-5xl mx-auto h-screen items-center justify-center px-4 sm:px-0">
       <div className="w-96 flex-col justify-center items-center gap-6 inline-flex">
@@ -22,7 +44,7 @@ const SignUp: React.FC<SignUpProps> = ({ }) => {
           Create your account
         </div>
         <div className="h-80 flex-col justify-start items-start gap-6 flex">
-        <div className="self-stretch h-16 flex-col justify-start items-start gap-1.5 flex">
+          <div className="self-stretch h-16 flex-col justify-start items-start gap-1.5 flex">
             <div className="text-neutral-700 text-sm font-medium font-['Noto Sans'] leading-tight">
               Email
             </div>
@@ -48,11 +70,11 @@ const SignUp: React.FC<SignUpProps> = ({ }) => {
           </div>
           <div className="self-stretch h-32 flex-col justify-start items-start gap-2 flex">
             {[
-              "8 - 64 characters",
-              "One uppercase letter",
-              "One lowercase letter",
-              "One number",
-              "One special character (e.g., ! @ # $ % ^ & *)",
+              { text: "8 - 64 characters", check: passwordRequirements.length },
+              { text: "One uppercase letter", check: passwordRequirements.uppercase },
+              { text: "One lowercase letter", check: passwordRequirements.lowercase },
+              { text: "One number", check: passwordRequirements.number },
+              { text: "One special character (e.g., ! @ # $ % ^ & *)", check: passwordRequirements.special },
             ].map((requirement, index) => (
               <div
                 key={index}
@@ -60,14 +82,14 @@ const SignUp: React.FC<SignUpProps> = ({ }) => {
               >
                 <div className="w-5 h-5 relative">
                   <img
-                    src="/checkbox-circle-fill.svg"
+                    src={requirement.check ? "/checkbox-circle-fill-green.svg" : "/checkbox-circle-fill.svg"}
                     alt="Checkbox"
                     className="w-full h-full"
                   />
                 </div>
                 <div className="grow shrink basis-0 flex-col justify-center items-start gap-3 inline-flex">
                   <div className="self-stretch text-neutral-600 text-xs font-normal font-['Noto Sans'] leading-none">
-                    {requirement}
+                    {requirement.text}
                   </div>
                 </div>
               </div>
