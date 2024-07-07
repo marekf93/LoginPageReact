@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import PasswordRequirements from "./PasswordRequirements";
 
 interface SignUpProps {
   onError: (error: string) => void;
 }
 
-const SignUp: React.FC<SignUpProps> = ({ }) => {
+const SignUp: React.FC<SignUpProps> = ({}) => {
   const [isChecked, setIsChecked] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -35,7 +36,8 @@ const SignUp: React.FC<SignUpProps> = ({ }) => {
     checkPasswordRequirements(password);
   }, [password]);
 
-  const inputClasses = "self-stretch px-3.5 py-2.5 bg-neutral-50 rounded border border-neutral-200 text-neutral-900 text-sm font-normal font-['Noto Sans'] leading-tight focus:outline-none focus:ring-2 focus:ring-indigo-700 focus:border-transparent transition duration-200 ease-in-out";
+  const inputClasses =
+    "self-stretch px-3.5 py-2.5 bg-neutral-50 rounded border border-neutral-200 text-neutral-900 text-sm font-normal font-['Noto Sans'] leading-tight focus:outline-none focus:ring-2 focus:ring-indigo-700 focus:border-transparent transition duration-200 ease-in-out";
 
   return (
     <div className="flex w-full max-w-5xl mx-auto h-screen items-center justify-center px-4 sm:px-0">
@@ -68,33 +70,7 @@ const SignUp: React.FC<SignUpProps> = ({ }) => {
               className={inputClasses}
             />
           </div>
-          <div className="self-stretch h-32 flex-col justify-start items-start gap-2 flex">
-            {[
-              { text: "8 - 64 characters", check: passwordRequirements.length },
-              { text: "One uppercase letter", check: passwordRequirements.uppercase },
-              { text: "One lowercase letter", check: passwordRequirements.lowercase },
-              { text: "One number", check: passwordRequirements.number },
-              { text: "One special character (e.g., ! @ # $ % ^ & *)", check: passwordRequirements.special },
-            ].map((requirement, index) => (
-              <div
-                key={index}
-                className="self-stretch justify-start items-center gap-3 inline-flex"
-              >
-                <div className="w-5 h-5 relative">
-                  <img
-                    src={requirement.check ? "/checkbox-circle-fill-green.svg" : "/checkbox-circle-fill.svg"}
-                    alt="Checkbox"
-                    className="w-full h-full"
-                  />
-                </div>
-                <div className="grow shrink basis-0 flex-col justify-center items-start gap-3 inline-flex">
-                  <div className="self-stretch text-neutral-600 text-xs font-normal font-['Noto Sans'] leading-none">
-                    {requirement.text}
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
+          <PasswordRequirements password={password} />
         </div>
         <div className="h-32 flex-col justify-start items-start gap-6 flex">
           <div className="self-stretch justify-start items-center gap-3 inline-flex">
