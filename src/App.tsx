@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { BrowserRouter as Router } from "react-router-dom";
 import AppRoutes from './routes';
-import ErrorNotification from "./components/ErrorNotification";
+import ErrorWrongPassword from "./components/ErrorWrongPassword";
 
 const App: React.FC = () => {
   const [showError, setShowError] = useState(false);

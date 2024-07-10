@@ -1,15 +1,20 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import PasswordRequirements from "./PasswordRequirements";
+import ErrorAgreeToTerms from "./ErrorAgreeToTerms";
+import ErrorAccountAlreadyExists from "./ErrorAccountAlreadyExists";
+
 
 interface SignUpProps {
   onError: (error: string) => void;
 }
 
-const SignUp: React.FC<SignUpProps> = ({}) => {
+const SignUp: React.FC<SignUpProps> = ({ onError }) => {
   const [isChecked, setIsChecked] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showTermsError, setShowTermsError] = useState(false);
+  const [showAccountExistsError, setShowAccountExistsError] = useState(false);
   const [passwordRequirements, setPasswordRequirements] = useState({
     length: false,
     uppercase: false,
@@ -17,6 +22,10 @@ const SignUp: React.FC<SignUpProps> = ({}) => {
     number: false,
     special: false,
   });
+
+  useEffect(() => {
+    checkPasswordRequirements(password);
+  }, [password]);
 
   const handleCheckboxClick = () => {
     setIsChecked(!isChecked);
@@ -32,9 +41,38 @@ const SignUp: React.FC<SignUpProps> = ({}) => {
     });
   };
 
-  useEffect(() => {
-    checkPasswordRequirements(password);
-  }, [password]);
+  const checkIfAccountExists = async (email: string): Promise<boolean> => {
+    // Simulating API call
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        resolve(email === "marek@fisera.sk");
+      }, 1000);
+    });
+  };
+
+  const handleCreateAccount = async () => {
+    if (!isChecked) {
+      setShowTermsError(true);
+      return;
+    }
+
+    setShowTermsError(false);
+    setShowAccountExistsError(false);
+
+    try {
+      const accountExists = await checkIfAccountExists(email);
+
+      if (accountExists) {
+        setShowAccountExistsError(true);
+      } else {
+        console.log("Creating account...");
+        // Add your account creation logic here
+      }
+    } catch (error) {
+      console.error("Error checking account existence:", error);
+      onError("An error occurred while creating your account. Please try again.");
+    }
+  };
 
   const inputClasses =
     "self-stretch px-3.5 py-2.5 bg-neutral-50 rounded border border-neutral-200 text-neutral-900 text-sm font-normal font-['Noto Sans'] leading-tight focus:outline-none focus:ring-2 focus:ring-indigo-700 focus:border-transparent transition duration-200 ease-in-out";
@@ -42,14 +80,14 @@ const SignUp: React.FC<SignUpProps> = ({}) => {
   return (
     <div className="flex w-full max-w-5xl mx-auto h-screen items-center justify-center px-4 sm:px-0">
       <div className="w-96 flex-col justify-center items-center gap-6 inline-flex">
-        <div className="w-84 lg:w-96 text-neutral-900 text-3xl font-semibold font-['Noto Sans'] leading-9">
+        <h2 className="w-84 lg:w-96 text-neutral-900 text-3xl font-semibold font-['Noto Sans'] leading-9">
           Create your account
-        </div>
+        </h2>
         <div className="h-80 flex-col justify-start items-start gap-6 flex">
           <div className="self-stretch h-16 flex-col justify-start items-start gap-1.5 flex">
-            <div className="text-neutral-700 text-sm font-medium font-['Noto Sans'] leading-tight">
+            <label className="text-neutral-700 text-sm font-medium font-['Noto Sans'] leading-tight">
               Email
-            </div>
+            </label>
             <input
               type="email"
               value={email}
@@ -59,9 +97,9 @@ const SignUp: React.FC<SignUpProps> = ({}) => {
             />
           </div>
           <div className="self-stretch h-16 flex-col justify-start items-start gap-1.5 flex">
-            <div className="text-neutral-700 text-sm font-medium font-['Noto Sans'] leading-tight">
+            <label className="text-neutral-700 text-sm font-medium font-['Noto Sans'] leading-tight">
               Password
-            </div>
+            </label>
             <input
               type="password"
               value={password}
@@ -99,51 +137,47 @@ const SignUp: React.FC<SignUpProps> = ({}) => {
                     </svg>
                   )}
                 </div>
-                <div>
-                  <span className="text-neutral-600 text-sm font-normal font-['Noto Sans'] leading-tight pl-3">
-                    I agree with
-                  </span>
-                  <span className="text-indigo-700 text-sm font-normal font-['Noto Sans'] leading-tight">
-                    {" "}
-                    <a
-                      href="https://www.verfacto.com/wp-content/uploads/2021/03/terms-of-service.pdf"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-indigo-700 text-sm font-normal font-['Noto Sans'] leading-tight hover:underline"
-                    >
-                      Terms of Service
-                    </a>
-                  </span>
-                </div>
+                <span className="text-neutral-600 text-sm font-normal font-['Noto Sans'] leading-tight pl-3">
+                  I agree with
+                  <a
+                    href="https://www.verfacto.com/wp-content/uploads/2021/03/terms-of-service.pdf"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-indigo-700 text-sm font-normal font-['Noto Sans'] leading-tight hover:underline ml-1"
+                  >
+                    Terms of Service
+                  </a>
+                </span>
               </div>
             </div>
           </div>
-          <button className="self-stretch px-3.5 py-2.5 bg-indigo-600 hover:bg-indigo-700 rounded shadow justify-center items-center gap-1 inline-flex">
-            <div className="px-0.5 justify-center items-center flex">
-              <div className="text-white text-sm font-medium font-['Noto Sans'] leading-tight transition-colors duration-300">
-                Create account
-              </div>
-            </div>
+          <button
+            onClick={handleCreateAccount}
+            className="self-stretch px-3.5 py-2.5 bg-indigo-600 hover:bg-indigo-700 rounded shadow justify-center items-center gap-1 inline-flex"
+          >
+            <span className="text-white text-sm font-medium font-['Noto Sans'] leading-tight transition-colors duration-300">
+              Create account
+            </span>
           </button>
           <div className="self-stretch justify-center items-center gap-4 inline-flex">
-            <div>
-              <span className="text-neutral-900 text-sm font-medium font-['Noto Sans'] leading-tight">
-                Already have an account?{" "}
-              </span>
-              <span className="text-indigo-700 text-sm font-medium font-['Noto Sans'] leading-tight">
-                <Link to="/login">Log in</Link>
-              </span>
-            </div>
+            <p className="text-neutral-900 text-sm font-medium font-['Noto Sans'] leading-tight">
+              Already have an account?{" "}
+              <Link to="/login" className="text-indigo-700">
+                Log in
+              </Link>
+            </p>
           </div>
         </div>
       </div>
       <div className="hidden lg:block lg:w-1/2 bg-white rounded-md shadow">
         <img
           src="signup_image.jfif"
-          alt="Sign Up Image"
+          alt="Sign Up"
           className="w-full h-full object-cover rounded-lg"
         />
       </div>
+      {showTermsError && <ErrorAgreeToTerms onClose={() => setShowTermsError(false)} />}
+      {showAccountExistsError && <ErrorAccountAlreadyExists onClose={() => setShowAccountExistsError(false)} />}
     </div>
   );
 };
